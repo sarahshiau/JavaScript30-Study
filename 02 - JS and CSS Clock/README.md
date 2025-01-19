@@ -271,7 +271,7 @@ const hours = now.getHours(); // 取得當前的小時數
    minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
    ```
 3. 更新時針：
-   ```javascript
+   ```javascript 
    hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
    ```
 
