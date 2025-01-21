@@ -11,8 +11,8 @@
     <div class="clock">
       <div class="clock-face">
         <div class="hand hour-hand"></div>
-        <div class="hand min-hand"></div>
-        <div class="hand second-hand"></div>
+        <div class="hand minute-hand"></div>
+        <div class="sec-hand second-hand"></div>
       </div>
     </div>
 
@@ -63,8 +63,23 @@
       background: black;
       position: absolute;
       top: 50%;
+      transform-origin: 100%; /* 指針的尾部作為旋轉基準點 */
+      transform: rotate(90deg); /* 初始化角度 */
+      transition: all 0.05s;
+      transition-timing-function: ease-in-out;
     }
 
+    .sec-hand {
+      width: 50%;
+      height: 2px;
+      background: black;
+      position: absolute;
+      top: 50%;
+      transform-origin: 100%; /* 指針的尾部作為旋轉基準點 */
+      transform: rotate(90deg); /* 初始化角度 */
+      transition: all 0.05s;
+      transition-timing-function: ease-in-out;
+    }
   </style>
 
   <script>
@@ -72,6 +87,39 @@
     const secondHand = document.querySelector('.second-hand');
     const minuteHand = document.querySelector('.minute-hand');
     const hourHand = document.querySelector('.hour-hand');
+    
+    function setClock(){
+    //步驟 2：取得當前時間
+      // 為什麼要先用 new Date() 取得時間物件
+      // 需要完整的時間資訊： new Date() 是 JavaScript 提供的唯一方法來取得當前的完整時間資訊。
+      // 避免不一致： 如果每次都重新呼叫 new Date()，不同的時間點可能會導致數據不一致。
+      // 高效和整潔： 一次呼叫 new Date()，即可取得所有所需的時間資訊，簡化程式碼結構。
+    const now = new Date();// 取得當前時間
+    const seconds = now.getSeconds();// 取得當前的秒數
+    const minutes = now.getMinutes();// 取得當前的分鐘數
+    const hours = now.getHours();// 取得當前的小時數
+
+    //步驟 3：計算旋轉角度
+      // seconds / 60：計算秒針走過的比例。
+      // * 360：將比例轉換為角度（時鐘是 360 度）。
+      // + 90：校正初始位置。
+    const secondsDegrees = ((seconds / 60) * 360) + 90;//秒針的角度
+    const minutesDegrees = ((minutes / 60) * 360) + 90;//分針的角度
+    const hoursDegrees = ((hours / 12) * 360) + 90;//時針的角度
+
+    //步驟 4：更新指針位置，將計算出的角度應用到指針的旋轉上
+    //secondHand.style.transform 將秒針的樣式設置為 rotate(角度)。
+    secondHand.style.transform = `rotate(${secondsDegrees}deg)`;//秒針
+    minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;//分針
+    hourHand.style.transform = `rotate(${hoursDegrees}deg)`;//時針
+    }
+
+    //步驟5：動態刷新指針位置
+      // callback：要執行的函數。
+      // milliseconds：間隔時間（以毫秒為單位）。
+    setInterval(setClock,1000);
+
+    setClock();//初始化時鐘的位置
   </script>
 </body>
 </html>
