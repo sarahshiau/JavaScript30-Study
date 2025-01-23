@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scoped CSS Variables and JS</title>
+  <link rel="icon" href="https://fav.farm/🔥" />
+</head>
+<body>
+  <h2>Update CSS Variables with <span class='hl'>JS</span></h2>
+
+  <div class="controls">
+    <label for="spacing">Spacing:</label>
+    <input id="spacing" type="range" name="spacing" min="10" max="200" value="10" data-sizing="px">
+
+    <label for="blur">Blur:</label>
+    <input id="blur" type="range" name="blur" min="0" max="25" value="10" data-sizing="px">
+
+    <label for="base">Base Color</label>
+    <input id="base" type="color" name="base" value="#ffc600">
+  </div>
+
+  <img src="https://images.unsplash.com/photo-1735736617209-1eb11346c798?w=1200&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw2fHx8ZW58MHx8fHx8">
+
+  <style>
+
+    /*
+      misc styles, nothing to do with CSS variables
+    */
+
+    /* :root 是一個 CSS 的伺服器級別選擇器，選取的是 HTML 的根元素 */
+    :root {
+      --base: #ffc600;
+      --spacing: 10px;
+      --blur: 10px;
+    }
+
+    body {
+      text-align: center;
+      background: #193549;
+      color: white;
+      font-family: 'helvetica neue', sans-serif;
+      font-weight: 100;
+      font-size: 50px;
+    }
+
+    .controls {
+      margin-bottom: 50px;
+    }
+
+    input {
+      width: 100px;
+    }
+
+    img {
+      width: 500px; /* 固定寬度 */
+      height: 800px; /* 固定高度 */
+      display: block; /* 確保圖片是區塊級元素 */
+      margin: 0 auto; /* 圖片居中 */
+      border: 10px solid var(--base); /* 邊框使用 CSS 變數 */
+      padding: var(--spacing); /* 邊框間距使用 CSS 變數 */
+      filter: blur(var(--blur)); /* 模糊度使用 CSS 變數 */
+    }
+
+
+  </style>
+
+  <script>
+    //1. 選取所有控制項
+      const inputs = document.querySelectorAll('.controls input');
+    
+      //2.處理更新 CSS 變數的函數
+      function handleUpdate(){
+        const suffix = this.dataset.sizing || '';
+        document.documentElement.style.setProperty(`--${this.name}`, this.value + suffix);
+        // 例子：如果滑桿是 Spacing，name="spacing"，value="50"，suffix="px"
+        // 更新 CSS：--spacing: 50px
+      }
+
+      //為每個控制項添加事件監聽器，監聽 'input' 事件
+      inputs.forEach(input => input.addEventListener('input',handleUpdate));
+
+  </script>
+
+</body>
+</html>
